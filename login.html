@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CNEFX Login</title>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9VT0SUSXgQIWNK9PTftBs-ofZ58YxLg0",
+    authDomain: "cnefxgames.firebaseapp.com",
+    projectId: "cnefxgames",
+    storageBucket: "cnefxgames.firebasestorage.app",
+    messagingSenderId: "1011771416395",
+    appId: "1:1011771416395:web:b1863763804a321cf412ce"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  window.googleLogin = async function () {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      localStorage.setItem("user", JSON.stringify({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL
+      }));
+
+      window.location.href = "index.html";
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+</script>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .box {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 280px;
+  }
+
+  button {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    background: #0072ff;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background: #005ed1;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="box">
+  <h2>Login</h2>
+  <button onclick="googleLogin()">Sign in with Google</button>
+</div>
+
+</body>
+</html>
