@@ -8,13 +8,34 @@
     body {
       margin: 0;
       font-family: Arial;
-      background: #0d0d0d;
+      background: #0b0b0b;
       color: white;
       text-align: center;
     }
 
+    /* 🏠 HOME BUTTON */
+    .home-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #1c1c1c;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid #333;
+      transition: 0.2s;
+      z-index: 999;
+    }
+
+    .home-btn:hover {
+      background: #2a2a2a;
+      transform: scale(1.05);
+    }
+
     header {
-      padding: 40px;
+      padding: 50px 20px 20px;
     }
 
     .status {
@@ -32,21 +53,23 @@
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
       padding: 20px;
-      max-width: 800px;
+      max-width: 850px;
       margin: auto;
     }
 
+    /* 🎮 GAME CARDS */
     .card {
-      background: #1c1c1c;
+      background: linear-gradient(145deg, #1c1c1c, #151515);
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 14px;
       transition: 0.2s;
       text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
     .card:hover {
-      transform: scale(1.05);
-      background: #2a2a2a;
+      transform: scale(1.06);
+      box-shadow: 0 6px 25px rgba(0, 255, 136, 0.15);
     }
 
     a {
@@ -63,12 +86,6 @@
       margin-bottom: 10px;
     }
 
-    footer {
-      margin-top: 40px;
-      font-size: 12px;
-      opacity: 0.5;
-    }
-
     button {
       margin-top: 10px;
       padding: 6px 12px;
@@ -83,10 +100,20 @@
     button:hover {
       background: #00cc6a;
     }
+
+    footer {
+      margin-top: 40px;
+      font-size: 12px;
+      opacity: 0.5;
+      padding-bottom: 20px;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- 🏠 HOME -->
+  <a href="index.html" class="home-btn">CNEFX</a>
 
   <header>
     <h1>CNEFX Game Hub</h1>
@@ -96,10 +123,12 @@
 
   <div class="grid">
 
-    <!-- TETRIS -->
+    <!-- 🎮 TETRIS -->
     <a href="tetris.html">
       <div class="card">
-        <img class="game-pfp" src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Tetrominoes_IJLSZ.png" alt="Tetris">
+        <img class="game-pfp"
+          src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Tetrominoes_IJLSZ.png"
+          alt="Tetris">
 
         <h3>TETRIS</h3>
         <p>Stack blocks. Clear lines. Survive.</p>
@@ -108,13 +137,13 @@
       </div>
     </a>
 
-    <!-- Game 2 placeholder -->
+    <!-- GAME 2 -->
     <div class="card">
       <h3>Game 2</h3>
       <p>Coming soon</p>
     </div>
 
-    <!-- STATUS CARD -->
+    <!-- STATUS -->
     <div class="card">
       <h3>Server Status</h3>
       <p>Uptime page</p>
@@ -127,7 +156,7 @@
   </div>
 
   <footer>
-    Hope you have fun
+    built by CNEFX 🚀
   </footer>
 
 </body>
