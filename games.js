@@ -15,8 +15,8 @@ const games = [
     desc: "Break all the bricks!"
   },
   {
-  name: "HEXGL",
-  file: "hexgl.html",
-  desc: "Futuristic racing"
-}
+    name: "HEXGL",
+    file: "hexgl.html",
+    desc: "Futuristic racing"
+  }
 ];
