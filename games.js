@@ -13,5 +13,10 @@ const games = [
     name: "BREAKOUT",
     file: "breakout.html",
     desc: "Break all the bricks!"
-  }
+  },
+  {
+  name: "HEXGL",
+  file: "hexgl.html",
+  desc: "Futuristic racing"
+}
 ];
