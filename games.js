@@ -23,5 +23,10 @@ const games = [
     name: "STICKMAN WORLD",
     file: "stickman-world.html",
     desc: "Stickman battle arena!"
+  },
+  {
+    name: "PAPER.IO 2",
+    file: "paperio2.html",
+    desc: "Conquer territory online!"
   }
 ];
