@@ -28,5 +28,10 @@ const games = [
     name: "PAPER.IO 2",
     file: "paperio2.html",
     desc: "Conquer territory online!"
+  },
+  {
+    name: "GEOMETRY DASH",
+    file: "geometrydash.html",
+    desc: "Rhythm platformer challenge!"
   }
 ];
