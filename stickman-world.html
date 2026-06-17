@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stickman World Battle - CNEFX</title>
+
+<style>
+body{
+  margin:0;
+  background: radial-gradient(circle at top, #1b1f3a, #0a0a0f 60%);
+  font-family: Arial;
+}
+
+/* HOME BUTTON */
+.home{
+  position:fixed;
+  top:15px;
+  left:15px;
+  padding:10px 14px;
+  background:#222;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  z-index:1000;
+}
+
+.home:hover{
+  background:#444;
+}
+
+/* CENTER WRAPPER */
+.wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* EMBED BOX */
+iframe{
+  width:90%;
+  max-width:960px;
+  height:540px;
+  border:none;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,255,255,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<a class="home" href="index.html">CNEFX</a>
+
+<div class="wrapper">
+
+<iframe
+  src="https://www.madkidgames.com/full/stickman-world-battle"
+  allowfullscreen
+  loading="lazy">
+</iframe>
+
+</div>
+
+</body>
+</html>
