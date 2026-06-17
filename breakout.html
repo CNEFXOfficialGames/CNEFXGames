@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Breakout - CNEFX</title>
+
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1b1f3a, #0a0a0f 60%);
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
+
+/* 🏠 HOME BUTTON */
+.home-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  padding: 10px 14px;
+  background: rgba(30,30,30,0.9);
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 999;
+}
+
+.home-btn:hover {
+  background: rgba(60,60,60,0.9);
+}
+
+/* WRAPPER */
+.wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* PANEL */
+.panel {
+  width: 160px;
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.stat {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* GAME CANVAS */
+canvas {
+  background: #111;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<a href="index.html" class="home-btn">CNEFX</a>
+
+<div class="wrapper">
+
+  <div class="panel">
+    <h2>BREAKOUT</h2>
+    <div class="stat">Score: <span id="score">0</span></div>
+    <div class="stat">Bricks left: <span id="bricks">0</span></div>
+    <p style="opacity:0.6;font-size:12px">
+      ← → to move
+    </p>
+  </div>
+
+  <canvas id="game" width="480" height="320"></canvas>
+
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let score = 0;
+let bricksLeft = 0;
+
+const scoreEl = document.getElementById("score");
+const bricksEl = document.getElementById("bricks");
+
+/* BALL */
+let ball = {
+  x: canvas.width/2,
+  y: canvas.height-30,
+  dx: 3,
+  dy: -3,
+  r: 8
+};
+
+/* PADDLE */
+let paddle = {
+  w: 80,
+  h: 10,
+  x: canvas.width/2 - 40
+};
+
+/* BRICKS */
+const rows = 5;
+const cols = 7;
+const brickW = 60;
+const brickH = 15;
+const padding = 10;
+const offsetTop = 30;
+const offsetLeft = 20;
+
+let bricks = [];
+
+for(let c=0;c<cols;c++){
+  bricks[c] = [];
+  for(let r=0;r<rows;r++){
+    bricks[c][r] = { x:0, y:0, status:1 };
+    bricksLeft++;
+  }
+}
+
+bricksEl.innerText = bricksLeft;
+
+/* INPUT */
+let rightPressed = false;
+let leftPressed = false;
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="ArrowRight") rightPressed = true;
+  if(e.key==="ArrowLeft") leftPressed = true;
+});
+
+document.addEventListener("keyup", e=>{
+  if(e.key==="ArrowRight") rightPressed = false;
+  if(e.key==="ArrowLeft") leftPressed = false;
+});
+
+/* DRAW BALL */
+function drawBall(){
+  ctx.beginPath();
+  ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+  ctx.fillStyle = "cyan";
+  ctx.fill();
+  ctx.closePath();
+}
+
+/* DRAW PADDLE */
+function drawPaddle(){
+  ctx.fillStyle = "lime";
+  ctx.fillRect(paddle.x, canvas.height-20, paddle.w, paddle.h);
+}
+
+/* DRAW BRICKS */
+function drawBricks(){
+  for(let c=0;c<cols;c++){
+    for(let r=0;r<rows;r++){
+      if(bricks[c][r].status){
+        let bx = c*(brickW+padding)+offsetLeft;
+        let by = r*(brickH+padding)+offsetTop;
+        bricks[c][r].x = bx;
+        bricks[c][r].y = by;
+
+        ctx.fillStyle = "#ff4d4d";
+        ctx.fillRect(bx,by,brickW,brickH);
+      }
+    }
+  }
+}
+
+/* COLLISION */
+function collision(){
+  for(let c=0;c<cols;c++){
+    for(let r=0;r<rows;r++){
+      let b = bricks[c][r];
+      if(b.status){
+        if(
+          ball.x > b.x &&
+          ball.x < b.x + brickW &&
+          ball.y > b.y &&
+          ball.y < b.y + brickH
+        ){
+          ball.dy = -ball.dy;
+          b.status = 0;
+          score += 10;
+          bricksLeft--;
+
+          scoreEl.innerText = score;
+          bricksEl.innerText = bricksLeft;
+        }
+      }
+    }
+  }
+}
+
+/* UPDATE */
+function update(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  drawBricks();
+  drawBall();
+  drawPaddle();
+
+  collision();
+
+  /* ball movement */
+  ball.x += ball.dx;
+  ball.y += ball.dy;
+
+  /* wall bounce */
+  if(ball.x + ball.r > canvas.width || ball.x - ball.r < 0){
+    ball.dx = -ball.dx;
+  }
+
+  if(ball.y - ball.r < 0){
+    ball.dy = -ball.dy;
+  }
+
+  /* paddle collision */
+  if(
+    ball.y + ball.r > canvas.height - 20 &&
+    ball.x > paddle.x &&
+    ball.x < paddle.x + paddle.w
+  ){
+    ball.dy = -ball.dy;
+  }
+
+  /* bottom = reset */
+  if(ball.y > canvas.height){
+    alert("Game Over!");
+    document.location.reload();
+  }
+
+  /* paddle movement */
+  if(rightPressed && paddle.x < canvas.width - paddle.w){
+    paddle.x += 6;
+  }
+  if(leftPressed && paddle.x > 0){
+    paddle.x -= 6;
+  }
+
+  requestAnimationFrame(update);
+}
+
+update();
+</script>
+
+</body>
+</html>
