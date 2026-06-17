@@ -13,7 +13,6 @@
     overflow-x: hidden;
   }
 
-  /* soft pattern */
   body::before {
     content: "";
     position: fixed;
@@ -26,7 +25,6 @@
     pointer-events: none;
   }
 
-  /* TOP BUTTONS */
   .home-btn, .discord-btn {
     position: fixed;
     top: 15px;
@@ -61,7 +59,6 @@
     font-size: 46px;
   }
 
-  /* STATUS (RESTORED) */
   .status {
     margin-top: 10px;
     font-size: 14px;
@@ -84,7 +81,21 @@
     cursor: pointer;
   }
 
-  /* SEARCH */
+  .user-box {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+  }
+
+  .user-box img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+
   .search-box {
     text-align: center;
     margin-top: 15px;
@@ -100,7 +111,6 @@
     box-shadow: 0 3px 10px rgba(0,0,0,0.08);
   }
 
-  /* FEATURED */
   .featured {
     max-width: 900px;
     margin: 20px auto;
@@ -124,7 +134,6 @@
     cursor: pointer;
   }
 
-  /* 🎮 POKI STYLE GRID (NO OVERLAP SAFE) */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -155,15 +164,9 @@
     border-color: #00c853;
   }
 
-  /* SAFE SIZES (NO OVERLAPS ANYMORE) */
   .card.small { grid-column: span 1; }
   .card.medium { grid-column: span 2; }
   .card.large { grid-column: span 2; grid-row: span 2; }
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
 
   footer {
     text-align: center;
@@ -186,10 +189,12 @@
     Status: <span class="online">Online</span>
   </div>
 
-  <!-- 🔥 UPTIME ROBOT BACK -->
   <a href="https://stats.uptimerobot.com/Yvcw7PIGbv">
     <button class="status-btn">Check Server Status</button>
   </a>
+
+  <!-- 👤 USER INFO -->
+  <div class="user-box" id="userBox"></div>
 </header>
 
 <div class="search-box">
@@ -211,10 +216,22 @@
 <script src="games.js"></script>
 
 <script>
+/* 🔐 LOGIN CHECK */
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  window.location.href = "login.html";
+} else {
+  document.getElementById("userBox").innerHTML = `
+    <img src="${user.photo}">
+    <span>Welcome, ${user.name}</span>
+  `;
+}
+
+/* GRID */
 const grid = document.getElementById("gameGrid");
 const searchInput = document.getElementById("searchInput");
 
-/* shuffle */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.random() * (i + 1) | 0;
@@ -223,7 +240,6 @@ function shuffle(arr) {
   return arr;
 }
 
-/* week featured */
 function getWeek() {
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 1);
@@ -242,7 +258,6 @@ document.getElementById("featuredBtn").onclick = () => {
   location.href = featured.file;
 };
 
-/* size system (SAFE) */
 function size() {
   const r = Math.random();
   if (r < 0.15) return "large";
@@ -250,7 +265,6 @@ function size() {
   return "small";
 }
 
-/* render */
 function render(list) {
   grid.innerHTML = "";
 
@@ -266,10 +280,8 @@ function render(list) {
   });
 }
 
-/* init */
 render(shuffle([...games]));
 
-/* search */
 searchInput.addEventListener("input", e => {
   const v = e.target.value.toLowerCase();
 
