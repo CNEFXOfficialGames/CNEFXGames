@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <title>CNEFX Game Hub</title>
 
+<!-- 🔐 MUST RUN FIRST (prevents bypass flash) -->
+<script>
+(function () {
+  const user = localStorage.getItem("user");
+  if (!user) {
+    window.location.replace("login.html");
+  }
+})();
+</script>
+
 <style>
   body {
     margin: 0;
@@ -108,7 +118,6 @@
     border-radius: 12px;
     border: 1px solid #ddd;
     outline: none;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
   }
 
   .featured {
@@ -121,7 +130,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   }
 
   .featured button {
@@ -142,7 +150,6 @@
     padding: 25px;
     max-width: 1100px;
     margin: auto;
-    grid-auto-flow: dense;
   }
 
   .card {
@@ -193,7 +200,6 @@
     <button class="status-btn">Check Server Status</button>
   </a>
 
-  <!-- 👤 USER INFO -->
   <div class="user-box" id="userBox"></div>
 </header>
 
@@ -216,17 +222,13 @@
 <script src="games.js"></script>
 
 <script>
-/* 🔐 LOGIN CHECK */
+/* 👤 USER DISPLAY */
 const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-  window.location.href = "login.html";
-} else {
-  document.getElementById("userBox").innerHTML = `
-    <img src="${user.photo}">
-    <span>Welcome, ${user.name}</span>
-  `;
-}
+document.getElementById("userBox").innerHTML = `
+  <img src="${user.photo}">
+  <span>Welcome, ${user.name}</span>
+`;
 
 /* GRID */
 const grid = document.getElementById("gameGrid");
