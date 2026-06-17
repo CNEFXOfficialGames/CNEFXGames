@@ -13,7 +13,6 @@
     overflow-x: hidden;
   }
 
-  /* subtle grid background */
   body::before {
     content: "";
     position: fixed;
@@ -22,7 +21,7 @@
       linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 50px 50px;
-    opacity: 0.35;
+    opacity: 0.3;
     pointer-events: none;
   }
 
@@ -69,12 +68,12 @@
 
   header {
     text-align: center;
-    padding: 80px 20px 25px;
+    padding: 80px 20px 10px;
   }
 
   header h1 {
     margin: 0;
-    font-size: 42px;
+    font-size: 44px;
     letter-spacing: 2px;
   }
 
@@ -89,7 +88,6 @@
     font-weight: bold;
   }
 
-  /* STATUS BUTTON */
   .status-btn {
     margin-top: 12px;
     padding: 7px 14px;
@@ -106,13 +104,51 @@
     background: #00cc6a;
   }
 
+  /* 🔥 FEATURED GAME */
+  .featured {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(25,25,25,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .featured h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .featured p {
+    margin: 5px 0 0;
+    opacity: 0.7;
+    font-size: 13px;
+  }
+
+  .featured button {
+    padding: 10px 16px;
+    background: #00ff88;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .featured button:hover {
+    background: #00cc6a;
+  }
+
   /* GRID */
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 18px;
-    padding: 30px;
-    max-width: 900px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 25px;
+    max-width: 1000px;
     margin: auto;
   }
 
@@ -124,11 +160,16 @@
     padding: 18px;
     text-align: center;
     transition: 0.25s;
+    cursor: pointer;
   }
 
   .card:hover {
     transform: translateY(-6px) scale(1.03);
     border-color: rgba(0,255,136,0.3);
+  }
+
+  .card:active {
+    transform: scale(0.97);
   }
 
   h3 {
@@ -192,6 +233,18 @@
   </a>
 </header>
 
+<!-- 🔥 FEATURED GAME -->
+<div class="featured">
+  <div>
+    <h2>🔥 Featured Game: Moto X3M</h2>
+    <p>Stunt racing madness — play instantly</p>
+  </div>
+
+  <button onclick="window.location.href='moto-x3m.html'">
+    Play Now
+  </button>
+</div>
+
 <!-- GAME GRID -->
 <div class="grid" id="gameGrid"></div>
 
@@ -202,7 +255,6 @@
 <!-- LOAD GAME DATA -->
 <script src="games.js"></script>
 
-<!-- BUILD GRID -->
 <script>
 const grid = document.getElementById("gameGrid");
 
