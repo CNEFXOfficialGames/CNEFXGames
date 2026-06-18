@@ -33,5 +33,10 @@ window.games = [
     name: "MOTO X3M",
     file: "motox3m.html",
     desc: "Bike stunt racing madness!"
+  },
+  {
+    name: "SMASH KARTS",
+    file: "smashkarts.html",
+    desc: "Multiplayer kart chaos!"
   }
 ];
