@@ -37,6 +37,6 @@ window.games = [
   {
     name: "SMASH KARTS",
     file: "smashkarts.html",
-    desc: "Multiplayer kart chaos!"
+    desc: "Play with your friends, or play against strangers! Smash Karts makes it happen!"
   }
 ];
