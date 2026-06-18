@@ -25,7 +25,7 @@
     pointer-events: none;
   }
 
-  .home-btn, .discord-btn, .account-btn {
+  .home-btn, .discord-btn {
     position: fixed;
     top: 15px;
     padding: 10px 14px;
@@ -48,13 +48,6 @@
     right: 15px;
     background: #5865F2;
     color: white;
-  }
-
-  .account-btn {
-    right: 140px;
-    background: #00c853;
-    color: white;
-    display: none;
   }
 
   header {
@@ -175,6 +168,54 @@
     font-size: 12px;
     opacity: 0.5;
   }
+
+  /* 👤 ACCOUNT BUTTON */
+  .account-btn {
+    position: fixed;
+    top: 15px;
+    right: 140px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    display: none;
+    z-index: 9999;
+  }
+
+  .account-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* DROPDOWN */
+  .dropdown {
+    position: fixed;
+    top: 65px;
+    right: 140px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 150px;
+    z-index: 9999;
+  }
+
+  .dropdown button {
+    padding: 10px;
+    border: none;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .dropdown button:hover {
+    background: #f2f2f2;
+  }
 </style>
 </head>
 
@@ -183,7 +224,16 @@
 <a href="index.html" class="home-btn">CNEFX</a>
 <a href="https://discord.gg/fQTDBBckPW" class="discord-btn" target="_blank">Discord</a>
 
-<button id="accountBtn" class="account-btn">My Account</button>
+<!-- 👤 avatar button -->
+<div id="accountBtn" class="account-btn">
+  <img id="accountPfp" src="">
+</div>
+
+<!-- dropdown -->
+<div id="dropdown" class="dropdown">
+  <button onclick="location.href='profile.html'">My Profile</button>
+  <button onclick="logout()">Logout</button>
+</div>
 
 <header>
   <h1>CNEFX Game Hub</h1>
@@ -218,102 +268,91 @@
 <script src="games.js"></script>
 
 <script>
-window.addEventListener("DOMContentLoaded", () => {
+const games = window.games || [];
 
-  try {
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
-    const games = window.games || [];
+const userBox = document.getElementById("userBox");
+const accBtn = document.getElementById("accountBtn");
+const pfp = document.getElementById("accountPfp");
+const dropdown = document.getElementById("dropdown");
 
-    /* =========================
-       👤 USER SYSTEM
-    ========================= */
-    let user = null;
+/* 👤 USER */
+if (user) {
+  userBox.innerHTML = `
+    <img src="${user.photo || 'https://via.placeholder.com/35'}">
+    <span>Welcome, ${user.name}</span>
+  `;
 
-    try {
-      user = JSON.parse(localStorage.getItem("user"));
-    } catch {}
+  accBtn.style.display = "block";
+  pfp.src = user.photo || "https://via.placeholder.com/40";
 
-    const userBox = document.getElementById("userBox");
-    const accBtn = document.getElementById("accountBtn");
+  accBtn.onclick = () => {
+    dropdown.style.display =
+      dropdown.style.display === "flex" ? "none" : "flex";
+  };
+}
 
-    if (userBox) {
-      userBox.innerHTML = user
-        ? `<img src="${user.photo || 'https://via.placeholder.com/35'}"><span>Welcome, ${user.name}</span>`
-        : `<span>Not logged in</span>`;
-    }
+/* logout */
+function logout() {
+  localStorage.removeItem("user");
+  location.href = "login.html";
+}
 
-    if (accBtn) {
-      accBtn.style.display = user ? "block" : "none";
-      if (user) accBtn.onclick = () => location.href = "profile.html";
-    }
-
-    /* =========================
-       🎮 GRID
-    ========================= */
-    const grid = document.getElementById("gameGrid");
-    const searchInput = document.getElementById("searchInput");
-
-    function render(list) {
-      if (!grid) return;
-      grid.innerHTML = "";
-
-      list.slice(0, 20).forEach(g => {
-        const a = document.createElement("a");
-        a.href = g.file;
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `<h3>${g.name}</h3><p>${g.desc}</p>`;
-
-        a.appendChild(card);
-        grid.appendChild(a);
-      });
-    }
-
-    render([...games].sort(() => Math.random() - 0.5));
-
-    /* =========================
-       🔍 SEARCH
-    ========================= */
-    if (searchInput) {
-      searchInput.addEventListener("input", e => {
-        const v = e.target.value.toLowerCase();
-
-        render(
-          games.filter(g =>
-            g.name.toLowerCase().includes(v) ||
-            g.desc.toLowerCase().includes(v)
-          )
-        );
-      });
-    }
-
-    /* =========================
-       🔥 FEATURED
-    ========================= */
-    const title = document.getElementById("featuredTitle");
-    const desc = document.getElementById("featuredDesc");
-    const btn = document.getElementById("featuredBtn");
-
-    if (games.length && title && desc && btn) {
-      const week = Math.floor(Date.now() / 604800000);
-      const featured = games[week % games.length];
-
-      title.textContent = "🔥 Featured: " + featured.name;
-      desc.textContent = featured.desc;
-
-      btn.onclick = () => location.href = featured.file;
-    }
-
-  } catch (err) {
-    console.error("Crash prevented:", err);
+/* close dropdown when clicking outside */
+window.addEventListener("click", (e) => {
+  if (!accBtn.contains(e.target)) {
+    dropdown.style.display = "none";
   }
-
 });
+
+/* GRID */
+const grid = document.getElementById("gameGrid");
+const searchInput = document.getElementById("searchInput");
+
+function render(list) {
+  grid.innerHTML = "";
+
+  list.slice(0, 20).forEach(g => {
+    const a = document.createElement("a");
+    a.href = g.file;
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${g.name}</h3><p>${g.desc}</p>`;
+
+    a.appendChild(card);
+    grid.appendChild(a);
+  });
+}
+
+render([...games].sort(() => Math.random() - 0.5));
+
+/* SEARCH */
+searchInput.addEventListener("input", e => {
+  const v = e.target.value.toLowerCase();
+
+  render(
+    games.filter(g =>
+      g.name.toLowerCase().includes(v) ||
+      g.desc.toLowerCase().includes(v)
+    )
+  );
+});
+
+/* FEATURED */
+const week = Math.floor(Date.now() / 604800000);
+const featured = games[week % games.length];
+
+document.getElementById("featuredTitle").textContent =
+"🔥 Featured: " + featured.name;
+
+document.getElementById("featuredDesc").textContent = featured.desc;
+
+document.getElementById("featuredBtn").onclick = () => {
+  location.href = featured.file;
+};
 </script>
 
 </body>
 </html>
-});
-</script>
