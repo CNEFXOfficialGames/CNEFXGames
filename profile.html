@@ -13,7 +13,6 @@
     padding: 50px;
   }
 
-  /* 🏠 HOME BUTTON */
   .home-btn {
     position: fixed;
     top: 15px;
@@ -26,7 +25,6 @@
     font-weight: bold;
   }
 
-  /* CARD */
   .card {
     background: white;
     padding: 20px;
@@ -62,6 +60,7 @@
     display: flex;
     justify-content: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .tab {
@@ -107,19 +106,28 @@ function goHome() {
   window.location.href = "index.html";
 }
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
 if (!user) {
   window.location.href = "login.html";
 }
 
-/* defaults */
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-let recent = JSON.parse(localStorage.getItem("recent") || "[]");
+/* =========================
+   🔐 PER-USER STORAGE KEY
+========================= */
+function key(name) {
+  return `${name}_${user.email || user.name}`;
+}
+
+/* per-account data */
+let favorites = JSON.parse(localStorage.getItem(key("favorites")) || "[]");
+let recent = JSON.parse(localStorage.getItem(key("recent")) || "[]");
 
 let tab = "profile";
 
-/* render */
+/* =========================
+   RENDER
+========================= */
 function render() {
   const card = document.getElementById("profileCard");
 
@@ -145,7 +153,7 @@ function render() {
 
       <div class="tab-bar">
         <div class="tab" onclick="switchTab('profile')">Profile</div>
-        <div class="tab active" onclick="switchTab('favorites')">Favorites</div>
+        <div class="tab active">Favorites</div>
         <div class="tab" onclick="switchTab('recent')">Recently Played</div>
       </div>
 
@@ -171,7 +179,7 @@ function render() {
       <div class="tab-bar">
         <div class="tab" onclick="switchTab('profile')">Profile</div>
         <div class="tab" onclick="switchTab('favorites')">Favorites</div>
-        <div class="tab active" onclick="switchTab('recent')">Recent</div>
+        <div class="tab active">Recent</div>
       </div>
 
       <div class="content">
@@ -190,30 +198,38 @@ function render() {
   }
 }
 
+/* =========================
+   TAB SWITCH
+========================= */
 function switchTab(t) {
   tab = t;
   render();
 }
 
+/* =========================
+   LOGOUT
+========================= */
 function logout() {
   localStorage.removeItem("user");
   window.location.href = "login.html";
 }
 
-/* fake helpers (we'll connect later) */
+/* =========================
+   HELPERS (use later in games)
+========================= */
 function addFavorite(game) {
   favorites.push(game);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
+  localStorage.setItem(key("favorites"), JSON.stringify(favorites));
 }
 
-function addRecent(gameName) {
+function addRecent(game) {
   recent.unshift({
-    name: gameName,
+    name: game.name,
     time: new Date().toLocaleString()
   });
 
   recent = recent.slice(0, 10);
-  localStorage.setItem("recent", JSON.stringify(recent));
+  localStorage.setItem(key("recent"), JSON.stringify(recent));
 }
 
 render();
