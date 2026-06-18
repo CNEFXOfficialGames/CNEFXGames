@@ -35,8 +35,8 @@ window.games = [
     desc: "Bike stunt racing madness!"
   },
   {
-    name: "SMASH KARTS",
-    file: "smashkarts.html",
-    desc: "Smash karts the number 1 co-op game!!"
+    name: "DRIVE MAD",
+    file: "drivemad.html",
+    desc: "Official Drive Mad game!"
   }
 ];
